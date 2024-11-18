@@ -3,330 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
-    <script defer src="script.js"></script>
-    <script defer src="posts_saver.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <style src="style.css"></style>
-    
-</head>
-<body>
-    <div class="my-account-icon" onclick="toggleAccountPanel()">
-        <i class="account-avatar">👤</i>
-    </div>
-    
-    <a href="posts.html" class="posts-btn" onclick="savePosts()">Go to Posts Feed</a>
-
-    <div class="account-panel">
-        <h2>My Account</h2>
-        <div class="account-form">
-            <div class="form-group">
-                <label for="display-name">Display Name</label>
-                <input type="text" id="display-name" value="Your Name">
-            </div>
-            <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" id="status" value="Available">
-            </div>
-            <div class="form-group">
-                <label for="bio">Bio</label>
-                <textarea id="bio">Tell us about yourself...</textarea>
-            </div>
-            <button onclick="saveAccountChanges()" class="save-btn">Save Changes</button>
-        </div>
-    </div>
-
+    <title>Sign In</title>
     <style>
-        .my-account-icon {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: #43a047;
-            border-radius: 50%;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2e9 0%, #b7dece 100%);
+            height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-            z-index: 1000;
+            align-items: center;
         }
 
-        .my-account-icon:hover {
-            transform: scale(1.1);
+        .signin-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
         }
 
-        .account-avatar {
-            font-size: 24px;
-            color: white;
+        .signin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .account-panel {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            width: 300px;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            display: none;
-            z-index: 1000;
-            animation: slideInRight 0.3s ease-out;
-        }
-
-        .account-panel.active {
-            display: block;
-        }
-
-        .account-panel h2 {
-            color: #2e7d32;
-            margin-bottom: 20px;
+        h1 {
+            color: #2c5543;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2em;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .form-group label {
-            display: block;
-            color: #1b5e20;
-            margin-bottom: 5px;
+        label {
+            color: #2c5543;
+            font-weight: bold;
+            font-size: 1em;
         }
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #a5d6a7;
-            border-radius: 4px;
-            font-size: 14px;
+        input[type="email"],
+        input[type="password"] {
+            padding: 12px;
+            border: 1px solid #b7dece;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #ffffff;
         }
 
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #2c5543;
+            box-shadow: 0 0 5px rgba(44, 85, 67, 0.2);
+            outline: none;
         }
 
-        .save-btn {
-            background: linear-gradient(45deg, #43a047, #2e7d32);
+        .terms-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #2c5543;
+        }
+
+        button {
+            background: #2c5543;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 1.1em;
             font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
         }
 
-        .save-btn:hover {
-            background: linear-gradient(45deg, #2e7d32, #1b5e20);
+        button:hover {
+            background: #1e3c2f;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
         }
 
-        .save-btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(46, 125, 50, 0.3);
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
         }
 
-        .save-btn::after {
+        .forgot-password a {
+            color: #2c5543;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #1e3c2f;
+            text-decoration: underline;
+        }
+
+        .github-button {
+            background: #24292e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .github-button:hover {
+            background: #1a1e22;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #2c5543;
+            margin: 15px 0;
+        }
+
+        .divider::before,
+        .divider::after {
             content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
+            flex: 1;
+            border-bottom: 1px solid #b7dece;
         }
 
-        .save-btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
+        .divider span {
+            padding: 0 10px;
         }
 
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(100, 100);
-                opacity: 0;
-            }
+        .signup-link {
+            text-align: center;
+            margin-top: 10px;
+            color: #2c5543;
+        }
+
+        .signup-link a {
+            color: #2c5543;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #1e3c2f;
+            text-decoration: underline;
         }
     </style>
+</head>
+<body>
+    
+    <div class="signin-container">
+        <h1>Welcome Back</h1>
+        <button onclick="signInWithGithub()" class="github-button">
+            <svg height="20" width="20" viewBox="0 0 16 16" fill="white">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+            Continue with GitHub
+        </button>
 
-    <script>
-        function toggleAccountPanel() {
-            const panel = document.querySelector('.account-panel');
-            panel.classList.toggle('active');
-        }
-
-        function saveAccountChanges() {
-            const displayName = document.getElementById('display-name').value;
-            const status = document.getElementById('status').value;
-            const bio = document.getElementById('bio').value;
-            
-            // Save account data using posts_saver
-            const accountData = { displayName, status, bio };
-            PostsSaver.saveAccountData(accountData);
-            
-            // Show success message
-            alert('Changes saved successfully!');
-            toggleAccountPanel();
-        }
-
-        function savePosts() {
-            // Save any unsaved posts before navigating
-            PostsSaver.savePendingPosts();
-        }
-    </script>
-    <div class="container">
-        <div class="contacts">
-            <button class="add-contact-btn" onclick="toggleAddContactForm()">Add New Contact</button>
-            <div class="add-contact-form" id="addContactForm">
-                <input type="text" id="newContactName" placeholder="Contact Name">
-                <input type="tel" id="newContactNumber" placeholder="Phone Number">
-                <button onclick="addNewContact()">Add</button>
-                <button class="cancel" onclick="toggleAddContactForm()">Cancel</button>
-            </div>
-            <div class="contact" onclick="showProfile(this)" data-bio="Software Developer" data-about="Passionate about coding and building great applications">John Doe</div>
-            <div class="contact" onclick="showProfile(this)" data-bio="UX Designer" data-about="Creating beautiful and intuitive user experiences">Jane Smith</div>
-            <div class="contact" onclick="showProfile(this)" data-bio="Project Manager" data-about="Experienced in leading successful tech projects">Mike Johnson</div>
-            <div class="contact" onclick="showProfile(this)" data-bio="Data Analyst" data-about="Turning data into meaningful insights">Sarah Williams</div>
+        <div class="divider">
+            <span>OR</span>
         </div>
-        <div class="chat-area">
-            <div class="profile">
-                <h2 class="profile-name"></h2>
-                <p class="profile-bio"></p>
-                <p class="profile-about"></p>
+
+        <form class="signin-form" onsubmit="return validateForm(event)">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="Enter your email">
             </div>
-            <div class="messages"></div>
-            <div class="input-area">
-                <input type="text" class="message-input" placeholder="Type your message...">
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
             </div>
+            <div class="forgot-password">
+                <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+            </div>
+                
+            <div class="terms-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="terms_conditions.html">Terms and Conditions</a></label>
+            </div>
+
+            <button type="submit">Sign In</button>
+        </form>
+
+        <div class="divider">
+            <span>New here?</span>
+        </div>
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html">Sign Up</a>
         </div>
     </div>
+
     <script>
-        function showProfile(contact) {
-            const profile = document.querySelector('.profile');
-            const profileName = document.querySelector('.profile-name');
-            const profileBio = document.querySelector('.profile-bio');
-            const profileAbout = document.querySelector('.profile-about');
+        async function validateForm(event) {
+            event.preventDefault();
             
-            // Remove active class first to reset animations
-            profile.classList.remove('active');
-            void profile.offsetWidth; // Trigger reflow
-            
-            profileName.textContent = contact.textContent;
-            profileBio.textContent = contact.getAttribute('data-bio');
-            profileAbout.textContent = contact.getAttribute('data-about');
-            
-            profile.classList.add('active');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const terms = document.getElementById('terms').checked;
+
+            if (!terms) {
+                alert('Please accept the terms and conditions');
+                return false;
+            }
+
+            try {
+                const response = await fetch('/api/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Sign in failed');
+                }
+
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                window.location.href = '/index.html';
+            } catch (error) {
+                alert('Sign in failed. Please try again.');
+                console.error('Sign in error:', error);
+            }
         }
 
-        function toggleAddContactForm() {
-            const form = document.getElementById('addContactForm');
-            form.classList.toggle('active');
-        }
-
-        function addNewContact() {
-            const name = document.getElementById('newContactName').value;
-            const number = document.getElementById('newContactNumber').value;
-            
-            if (!name || !number) {
-                alert('Please fill in both name and number');
+        async function forgotPassword() {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                alert('Please enter your email address');
                 return;
             }
 
-            const contactsContainer = document.querySelector('.contacts');
-            const newContact = document.createElement('div');
-            newContact.className = 'contact';
-            newContact.setAttribute('onclick', 'showProfile(this)');
-            newContact.setAttribute('data-bio', `Phone: ${number}`);
-            newContact.setAttribute('data-about', 'New contact');
-            newContact.textContent = name;
+            try {
+                const response = await fetch('/api/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
 
-            // Insert after the add contact form
-            const addContactForm = document.getElementById('addContactForm');
-            addContactForm.parentNode.insertBefore(newContact, addContactForm.nextSibling);
+                if (!response.ok) {
+                    throw new Error('Password reset request failed');
+                }
 
-            // Save contact using posts_saver
-            PostsSaver.saveContact({ name, number });
-
-            // Clear form and hide it
-            document.getElementById('newContactName').value = '';
-            document.getElementById('newContactNumber').value = '';
-            toggleAddContactForm();
+                alert('Password reset link has been sent to your email');
+            } catch (error) {
+                alert('Failed to send reset link. Please try again.');
+                console.error('Password reset error:', error);
+            }
         }
 
-        // Add like functionality to messages
-        document.addEventListener('DOMContentLoaded', () => {
-            const messagesContainer = document.querySelector('.messages');
+        async function signInWithGithub() {
+            const clientId = '1234567890abcdef1234'; // Example GitHub client ID - replace with your actual client ID
+            const redirectUri = encodeURIComponent(`${window.location.origin}/github-callback`);
+            const scope = 'user:email';
             
-            // Add like button to new messages
-            const addLikeButton = (messageDiv) => {
-                const likeButton = document.createElement('button');
-                likeButton.className = 'like-button';
-                likeButton.innerHTML = '♥';
-                likeButton.setAttribute('data-likes', '0');
-                
-                const likeCount = document.createElement('span');
-                likeCount.className = 'like-count';
-                likeCount.textContent = '0';
-                
-                messageDiv.appendChild(likeButton);
-                messageDiv.appendChild(likeCount);
-                
-                likeButton.addEventListener('click', () => {
-                    const currentLikes = parseInt(likeButton.getAttribute('data-likes'));
-                    if (likeButton.classList.contains('liked')) {
-                        // Unlike
-                        likeButton.setAttribute('data-likes', currentLikes - 1);
-                        likeCount.textContent = currentLikes - 1;
-                        likeButton.classList.remove('liked');
-                        PostsSaver.saveLike(messageDiv.id, false);
-                    } else {
-                        // Like
-                        likeButton.setAttribute('data-likes', currentLikes + 1);
-                        likeCount.textContent = currentLikes + 1;
-                        likeButton.classList.add('liked');
-                        PostsSaver.saveLike(messageDiv.id, true);
-                    }
-                });
-            };
-
-            // Monitor for new messages and add like buttons
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.classList && node.classList.contains('message')) {
-                            addLikeButton(node);
-                            // Save new message using posts_saver
-                            PostsSaver.saveMessage({
-                                id: node.id,
-                                content: node.textContent,
-                                type: node.classList.contains('sent') ? 'sent' : 'received'
-                            });
-                        }
-                    });
-                });
-            });
-
-            observer.observe(messagesContainer, { childList: true });
-        });
+            const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+            
+            window.location.href = githubAuthUrl;
+        }
     </script>
 </body>
 </html>
