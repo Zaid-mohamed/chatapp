@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 100%);
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .post {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            animation: fadeIn 0.5s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            color: #1b5e20;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .post-content {
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .like-button {
+            background: white;
+            border: 2px solid #81c784;
+            border-radius: 25px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .like-button:hover {
+            background: #e8f5e9;
+            transform: scale(1.05);
+        }
+
+        .like-button.liked {
+            background: #43a047;
+            color: white;
+            border-color: #43a047;
+            box-shadow: 0 2px 8px rgba(67, 160, 71, 0.4);
+        }
+
+        .comments-section {
+            margin-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            padding-top: 20px;
+        }
+
+        .comment {
+            background: #f8faf8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #81c784;
+            transition: transform 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .comment:hover {
+            transform: translateX(5px);
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-like-button {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .comment-like-button:hover {
+            background: #e8f5e9;
+        }
+
+        .comment-like-button.liked {
+            color: #43a047;
+            background: #e8f5e9;
+        }
+
+        .comment-form {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #81c784;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .comment-input:focus {
+            border-color: #43a047;
+            box-shadow: 0 0 10px rgba(67, 160, 71, 0.2);
+        }
+
+        .comment-submit {
+            background: #43a047;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comment-submit:hover {
+            background: #2e7d32;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.4);
+        }
+
+        .create-post-btn {
+            background: #43a047;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(67, 160, 71, 0.3);
+        }
+
+        .create-post-btn:hover {
+            background: #2e7d32;
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        }
+
+        .create-post-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+            border: 2px solid #a5d6a7;
+        }
+
+        .create-post-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .post-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #81c784;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            resize: vertical;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .post-input:focus {
+            border-color: #43a047;
+            box-shadow: 0 0 15px rgba(67, 160, 71, 0.2);
+        }
+
+        .chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #43a047;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(67, 160, 71, 0.3);
+        }
+
+        .chat-btn:hover {
+            background: #2e7d32;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="create-post-btn">Create New Post</button>
+    
+    <div class="create-post-panel">
+        <textarea class="post-input" placeholder="What's on your mind?"></textarea>
+        <button class="comment-submit" onclick="createPost()">Post</button>
+    </div>
+
+    <div class="posts-container">
+        <!-- Sample Post -->
+        <div class="post">
+            <div class="post-header">
+                <span class="author">John Doe</span>
+                <span class="date">2 hours ago</span>
+            </div>
+            <div class="post-content">
+                This is a sample post content. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </div>
+            <div class="post-actions">
+                <button class="like-button">
+                    ♥ <span class="like-count">0</span> Likes
+                </button>
+            </div>
+            <div class="comments-section">
+                <h4>Comments</h4>
+                <div class="comment">
+                    <div class="comment-content">
+                        <strong>Jane Smith:</strong> Great post!
+                    </div>
+                    <button class="comment-like-button">
+                        ♥ <span class="comment-like-count">0</span>
+                    </button>
+                </div>
+                <form class="comment-form">
+                    <input type="text" class="comment-input" placeholder="Write a comment...">
+                    <button type="submit" class="comment-submit">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html">
+        <button class="chat-btn">Open Chat</button>
+    </a>
+
+    <script src="posts_saver.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle create post button
+            const createPostBtn = document.querySelector('.create-post-btn');
+            const createPostPanel = document.querySelector('.create-post-panel');
+            
+            createPostBtn.addEventListener('click', () => {
+                createPostPanel.classList.toggle('active');
+            });
+
+            // Handle like buttons
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const likeCount = button.querySelector('.like-count');
+                    let likes = parseInt(likeCount.textContent);
+                    
+                    if (button.classList.contains('liked')) {
+                        likes--;
+                        button.classList.remove('liked');
+                    } else {
+                        likes++;
+                        button.classList.add('liked');
+                    }
+                    
+                    likeCount.textContent = likes;
+                });
+            });
+
+            // Handle comment likes
+            document.querySelectorAll('.comment-like-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const likeCount = button.querySelector('.comment-like-count');
+                    let likes = parseInt(likeCount.textContent);
+                    
+                    if (button.classList.contains('liked')) {
+                        likes--;
+                        button.classList.remove('liked');
+                    } else {
+                        likes++;
+                        button.classList.add('liked');
+                    }
+                    
+                    likeCount.textContent = likes;
+                });
+            });
+
+            // Handle comment forms
+            document.querySelectorAll('.comment-form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const input = form.querySelector('.comment-input');
+                    const comment = input.value.trim();
+                    
+                    if (comment) {
+                        const commentsSection = form.parentElement;
+                        const newComment = document.createElement('div');
+                        newComment.className = 'comment';
+                        newComment.innerHTML = `
+                            <div class="comment-content">
+                                <strong>Current User:</strong> ${comment}
+                            </div>
+                            <button class="comment-like-button">
+                                ♥ <span class="comment-like-count">0</span>
+                            </button>
+                        `;
+                        
+                        // Add like functionality to new comment
+                        const likeButton = newComment.querySelector('.comment-like-button');
+                        likeButton.addEventListener('click', () => {
+                            const likeCount = likeButton.querySelector('.comment-like-count');
+                            let likes = parseInt(likeCount.textContent);
+                            
+                            if (likeButton.classList.contains('liked')) {
+                                likes--;
+                                likeButton.classList.remove('liked');
+                            } else {
+                                likes++;
+                                likeButton.classList.add('liked');
+                            }
+                            
+                            likeCount.textContent = likes;
+                        });
+
+                        commentsSection.insertBefore(newComment, form);
+                        input.value = '';
+                    }
+                });
+            });
+        });
+
+        // Original createPost function will be modified by posts_saver.js
+        function createPost() {
+            const postContent = document.querySelector('.post-input').value.trim();
+            if (postContent) {
+                const postsContainer = document.querySelector('.posts-container');
+                const newPost = document.createElement('div');
+                newPost.className = 'post';
+                newPost.innerHTML = `
+                    <div class="post-header">
+                        <span class="author">Current User</span>
+                        <span class="date">Just now</span>
+                    </div>
+                    <div class="post-content">${postContent}</div>
+                    <div class="post-actions">
+                        <button class="like-button">
+                            ♥ <span class="like-count">0</span> Likes
+                        </button>
+                    </div>
+                    <div class="comments-section">
+                        <h4>Comments</h4>
+                        <form class="comment-form">
+                            <input type="text" class="comment-input" placeholder="Write a comment...">
+                            <button type="submit" class="comment-submit">Post</button>
+                        </form>
+                    </div>
+                `;
+                
+                postsContainer.insertBefore(newPost, postsContainer.firstChild);
+                document.querySelector('.post-input').value = '';
+                document.querySelector('.create-post-panel').classList.remove('active');
+                
+                // Add like button functionality to new post
+                const likeButton = newPost.querySelector('.like-button');
+                likeButton.addEventListener('click', () => {
+                    const likeCount = likeButton.querySelector('.like-count');
+                    let likes = parseInt(likeCount.textContent);
+                    
+                    if (likeButton.classList.contains('liked')) {
+                        likes--;
+                        likeButton.classList.remove('liked');
+                    } else {
+                        likes++;
+                        likeButton.classList.add('liked');
+                    }
+                    
+                    likeCount.textContent = likes;
+                });
+
+                // Add comment form functionality to new post
+                const commentForm = newPost.querySelector('.comment-form');
+                commentForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const input = commentForm.querySelector('.comment-input');
+                    const comment = input.value.trim();
+                    
+                    if (comment) {
+                        const commentsSection = commentForm.parentElement;
+                        const newComment = document.createElement('div');
+                        newComment.className = 'comment';
+                        newComment.innerHTML = `
+                            <div class="comment-content">
+                                <strong>Current User:</strong> ${comment}
+                            </div>
+                            <button class="comment-like-button">
+                                ♥ <span class="comment-like-count">0</span>
+                            </button>
+                        `;
+
+                        // Add like functionality to new comment
+                        const likeButton = newComment.querySelector('.comment-like-button');
+                        likeButton.addEventListener('click', () => {
+                            const likeCount = likeButton.querySelector('.comment-like-count');
+                            let likes = parseInt(likeCount.textContent);
+                            
+                            if (likeButton.classList.contains('liked')) {
+                                likes--;
+                                likeButton.classList.remove('liked');
+                            } else {
+                                likes++;
+                                likeButton.classList.add('liked');
+                            }
+                            
+                            likeCount.textContent = likes;
+                        });
+
+                        commentsSection.insertBefore(newComment, commentForm);
+                        input.value = '';
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

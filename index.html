@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script defer src="script.js"></script>
+    <script defer src="posts_saver.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style src="style.css"></style>
+    
+</head>
+<body>
+    <div class="my-account-icon" onclick="toggleAccountPanel()">
+        <i class="account-avatar">👤</i>
+    </div>
+    
+    <a href="posts.html" class="posts-btn" onclick="savePosts()">Go to Posts Feed</a>
+
+    <div class="account-panel">
+        <h2>My Account</h2>
+        <div class="account-form">
+            <div class="form-group">
+                <label for="display-name">Display Name</label>
+                <input type="text" id="display-name" value="Your Name">
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <input type="text" id="status" value="Available">
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio">Tell us about yourself...</textarea>
+            </div>
+            <button onclick="saveAccountChanges()" class="save-btn">Save Changes</button>
+        </div>
+    </div>
+
+    <style>
+        .my-account-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: #43a047;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .my-account-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .account-avatar {
+            font-size: 24px;
+            color: white;
+        }
+
+        .account-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .account-panel.active {
+            display: block;
+        }
+
+        .account-panel h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #1b5e20;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #a5d6a7;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, #43a047, #2e7d32);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(45deg, #2e7d32, #1b5e20);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        }
+
+        .save-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(46, 125, 50, 0.3);
+        }
+
+        .save-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .save-btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(100, 100);
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <script>
+        function toggleAccountPanel() {
+            const panel = document.querySelector('.account-panel');
+            panel.classList.toggle('active');
+        }
+
+        function saveAccountChanges() {
+            const displayName = document.getElementById('display-name').value;
+            const status = document.getElementById('status').value;
+            const bio = document.getElementById('bio').value;
+            
+            // Save account data using posts_saver
+            const accountData = { displayName, status, bio };
+            PostsSaver.saveAccountData(accountData);
+            
+            // Show success message
+            alert('Changes saved successfully!');
+            toggleAccountPanel();
+        }
+
+        function savePosts() {
+            // Save any unsaved posts before navigating
+            PostsSaver.savePendingPosts();
+        }
+    </script>
+    <div class="container">
+        <div class="contacts">
+            <button class="add-contact-btn" onclick="toggleAddContactForm()">Add New Contact</button>
+            <div class="add-contact-form" id="addContactForm">
+                <input type="text" id="newContactName" placeholder="Contact Name">
+                <input type="tel" id="newContactNumber" placeholder="Phone Number">
+                <button onclick="addNewContact()">Add</button>
+                <button class="cancel" onclick="toggleAddContactForm()">Cancel</button>
+            </div>
+            <div class="contact" onclick="showProfile(this)" data-bio="Software Developer" data-about="Passionate about coding and building great applications">John Doe</div>
+            <div class="contact" onclick="showProfile(this)" data-bio="UX Designer" data-about="Creating beautiful and intuitive user experiences">Jane Smith</div>
+            <div class="contact" onclick="showProfile(this)" data-bio="Project Manager" data-about="Experienced in leading successful tech projects">Mike Johnson</div>
+            <div class="contact" onclick="showProfile(this)" data-bio="Data Analyst" data-about="Turning data into meaningful insights">Sarah Williams</div>
+        </div>
+        <div class="chat-area">
+            <div class="profile">
+                <h2 class="profile-name"></h2>
+                <p class="profile-bio"></p>
+                <p class="profile-about"></p>
+            </div>
+            <div class="messages"></div>
+            <div class="input-area">
+                <input type="text" class="message-input" placeholder="Type your message...">
+            </div>
+        </div>
+    </div>
+    <script>
+        function showProfile(contact) {
+            const profile = document.querySelector('.profile');
+            const profileName = document.querySelector('.profile-name');
+            const profileBio = document.querySelector('.profile-bio');
+            const profileAbout = document.querySelector('.profile-about');
+            
+            // Remove active class first to reset animations
+            profile.classList.remove('active');
+            void profile.offsetWidth; // Trigger reflow
+            
+            profileName.textContent = contact.textContent;
+            profileBio.textContent = contact.getAttribute('data-bio');
+            profileAbout.textContent = contact.getAttribute('data-about');
+            
+            profile.classList.add('active');
+        }
+
+        function toggleAddContactForm() {
+            const form = document.getElementById('addContactForm');
+            form.classList.toggle('active');
+        }
+
+        function addNewContact() {
+            const name = document.getElementById('newContactName').value;
+            const number = document.getElementById('newContactNumber').value;
+            
+            if (!name || !number) {
+                alert('Please fill in both name and number');
+                return;
+            }
+
+            const contactsContainer = document.querySelector('.contacts');
+            const newContact = document.createElement('div');
+            newContact.className = 'contact';
+            newContact.setAttribute('onclick', 'showProfile(this)');
+            newContact.setAttribute('data-bio', `Phone: ${number}`);
+            newContact.setAttribute('data-about', 'New contact');
+            newContact.textContent = name;
+
+            // Insert after the add contact form
+            const addContactForm = document.getElementById('addContactForm');
+            addContactForm.parentNode.insertBefore(newContact, addContactForm.nextSibling);
+
+            // Save contact using posts_saver
+            PostsSaver.saveContact({ name, number });
+
+            // Clear form and hide it
+            document.getElementById('newContactName').value = '';
+            document.getElementById('newContactNumber').value = '';
+            toggleAddContactForm();
+        }
+
+        // Add like functionality to messages
+        document.addEventListener('DOMContentLoaded', () => {
+            const messagesContainer = document.querySelector('.messages');
+            
+            // Add like button to new messages
+            const addLikeButton = (messageDiv) => {
+                const likeButton = document.createElement('button');
+                likeButton.className = 'like-button';
+                likeButton.innerHTML = '♥';
+                likeButton.setAttribute('data-likes', '0');
+                
+                const likeCount = document.createElement('span');
+                likeCount.className = 'like-count';
+                likeCount.textContent = '0';
+                
+                messageDiv.appendChild(likeButton);
+                messageDiv.appendChild(likeCount);
+                
+                likeButton.addEventListener('click', () => {
+                    const currentLikes = parseInt(likeButton.getAttribute('data-likes'));
+                    if (likeButton.classList.contains('liked')) {
+                        // Unlike
+                        likeButton.setAttribute('data-likes', currentLikes - 1);
+                        likeCount.textContent = currentLikes - 1;
+                        likeButton.classList.remove('liked');
+                        PostsSaver.saveLike(messageDiv.id, false);
+                    } else {
+                        // Like
+                        likeButton.setAttribute('data-likes', currentLikes + 1);
+                        likeCount.textContent = currentLikes + 1;
+                        likeButton.classList.add('liked');
+                        PostsSaver.saveLike(messageDiv.id, true);
+                    }
+                });
+            };
+
+            // Monitor for new messages and add like buttons
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.classList && node.classList.contains('message')) {
+                            addLikeButton(node);
+                            // Save new message using posts_saver
+                            PostsSaver.saveMessage({
+                                id: node.id,
+                                content: node.textContent,
+                                type: node.classList.contains('sent') ? 'sent' : 'received'
+                            });
+                        }
+                    });
+                });
+            });
+
+            observer.observe(messagesContainer, { childList: true });
+        });
+    </script>
+</body>
+</html>
