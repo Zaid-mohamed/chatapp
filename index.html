@@ -18,6 +18,29 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%232c5543" d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22l1-2.3A4.49,4.49,0,0,0,8,20C19,20,22,3,22,3,21,5,14,5.25,9,6.25S2,11.5,2,13.5a6.23,6.23,0,0,0,1.5,3.75L2,17.5V19L3.5,18,5,19V17.5L3.5,16.25C4.5,15.5,6,15,8,15c-3-2-1-6,4-7C10,11,16,10,17,8Z"/></svg>') no-repeat center center;
+            opacity: 0.6;
+            animation: falling linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .signin-container {
@@ -27,6 +50,8 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
+            position: relative;
+            z-index: 2;
         }
 
         .signin-form {
@@ -168,6 +193,11 @@
     </style>
 </head>
 <body>
+    <div class="leaf" style="left: 10%; animation-duration: 8s; animation-delay: 1s;"></div>
+    <div class="leaf" style="left: 30%; animation-duration: 10s; animation-delay: 3s;"></div>
+    <div class="leaf" style="left: 50%; animation-duration: 7s; animation-delay: 5s;"></div>
+    <div class="leaf" style="left: 70%; animation-duration: 11s; animation-delay: 2s;"></div>
+    <div class="leaf" style="left: 90%; animation-duration: 9s; animation-delay: 4s;"></div>
     
     <div class="signin-container">
         <h1>Welcome Back</h1>
@@ -208,7 +238,7 @@
             <span>New here?</span>
         </div>
         <div class="signup-link">
-            Don't have an account? <a href="signup.html">Sign Up</a>
+            Don't have an account? <a href="SignUp.html">Sign Up</a>
         </div>
     </div>
 
